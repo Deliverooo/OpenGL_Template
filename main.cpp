@@ -7,6 +7,7 @@
 #include <backends/imgui_impl_opengl3.h>
 
 void processInput(GLFWwindow *window);
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
@@ -17,8 +18,11 @@ double deltaTime = 0.0f;
 double lastFrame = 0.0f;
 double currentFrame = 0.0f;
 
-float lastX = static_cast<float>(WIDTH) / 2.0f;
-float lastY = static_cast<float>(HEIGHT) / 2.0f;
+double lastX = static_cast<double>(WIDTH) / 2.0;
+double lastY = static_cast<double>(HEIGHT) / 2.0;
+
+// avoid mouse jumping by checking if it is the first time moving the mouse
+bool firstMouse = true;
 
 int main()
 {
@@ -29,7 +33,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    //anti-aliasing
+    // if you're using antialiasing
     // glfwWindowHint(GLFW_SAMPLES, 4);
 
     // glfw window creation
@@ -57,13 +61,13 @@ int main()
         return -1;
     }
 
+    //creates an imgui context and sets the parameters
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 460");
-
 
     //main loop
     while (!glfwWindowShouldClose(window))
@@ -94,10 +98,10 @@ int main()
         deltaTime = lastFrame - currentFrame;
     }
 
+    // deallocating the memory for the windows and cleaning up
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
@@ -111,4 +115,22 @@ void processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
+}
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+
+}
+//the mouse callback
+//this will get called every time the mouse is moved
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+    double mouseDx = xpos - lastX;
+    double mouseDy = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
 }
