@@ -5,7 +5,9 @@ set(CMAKE_CXX_STANDARD 20)
 
 set(SOURCE_FILES main.cpp
         header_files/shader.h
-        dependencies/stb_image/src/stb_image.cpp)
+        dependencies/stb_image/src/stb_image.cpp
+        header_files/mesh.h
+        header_files/model.h)
 
 add_subdirectory("dependencies/glfw-3.4")
 add_subdirectory("dependencies/glad")

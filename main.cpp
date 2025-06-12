@@ -1,10 +1,6 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <imgui.h>
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
 
 void processInput(GLFWwindow *window);
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
@@ -61,14 +57,6 @@ int main()
         return -1;
     }
 
-    //creates an imgui context and sets the parameters
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 460");
-
     //main loop
     while (!glfwWindowShouldClose(window))
     {
@@ -79,16 +67,6 @@ int main()
         glClearColor(0.0f, 0.31f, 0.68f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        ImGui::Begin("Hello ImGui!");
-        ImGui::Text("This is text!");
-        ImGui::End();
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         //swaps the front and back buffers
         glfwSwapBuffers(window);
@@ -99,9 +77,6 @@ int main()
     }
 
     // deallocating the memory for the windows and cleaning up
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
@@ -121,6 +96,7 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 }
 //the mouse callback
 //this will get called every time the mouse is moved
+
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
     if (firstMouse) {
@@ -132,5 +108,4 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     double mouseDy = lastY - ypos;
     lastX = xpos;
     lastY = ypos;
-
 }
